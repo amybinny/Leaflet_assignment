@@ -1,0 +1,48 @@
+---
+title: "New Seven Wonders"
+author: ""
+date: "March 3, 2020"
+output: html_document
+---
+
+Here I locate the 'New Seven Wonders of the World' plus one which has an Honorary status in the map using 'leaflet'. To know more about these places I have linked each location to a Wikipedia page. Different coloured spots describe the period in which they have been built whose description are given in the legends. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,tidy = TRUE, tidy.opts = list(comment = FALSE))
+```
+```{r, comment="",echo=FALSE, results='hide',include=FALSE}
+library(leaflet); library(dplyr)
+library(htmlwidgets)
+```
+
+
+```{r, comment="", message=FALSE}
+#library(leaflet); library(dplyr)
+n7wonders<- data.frame(
+  name=c("The Great Pyramid of Giza(Honorary status)","Great Wall of China","Petra","Colosseum","Chichen Itza", "Machu Picchu","Taj Mahal","Christ the Redeemer"), sites = c(
+"<a href='https://en.wikipedia.org/wiki/Great_Pyramid_of_Giza'>The Great Pyramid of Giza(Honorary status)</a>",
+"<a href='https://en.wikipedia.org/wiki/Great_Wall_of_China'>Great Wall of China</a>",
+"<a href='https://en.wikipedia.org/wiki/Petra'>Petra</a>",
+"<a href='https://en.wikipedia.org/wiki/Colosseum'>Colosseum</a>",
+"<a href='https://en.wikipedia.org/wiki/Chichen_Itza'>Chichen Itza</a>",
+"<a href='https://en.wikipedia.org/wiki/Machu_Picchu'>Machu Picchu</a>",
+"<a href='https://en.wikipedia.org/wiki/Taj_Mahal'>Taj Mahal</a>",
+"<a href='https://en.wikipedia.org/wiki/Christ_the_Redeemer_(statue)'>Christ the Redeemer</a>"), Time = c("Before AD","Before AD","Before AD","1AD-1000AD","1AD-1000AD","From 1000AD","From 1000AD","From 1000AD"),
+                       lat=c(29.9792,40.4319,30.3285,41.8902,20.6843,-13.1631,27.1751,-22.9519),
+                       lng=c(31.1342,116.5704,35.4444,12.4922,-88.5678,-72.5450,78.0421, -43.2105))
+
+
+nn7wonders<-mutate(n7wonders,col=ifelse(n7wonders$Time=="Before AD", "blue",
+                            ifelse(n7wonders$Time=="1AD-1000AD","red","green")))
+
+##with markers and no legends
+##n7wonders %>%leaflet() %>% addTiles()%>% addMarkers(popup = n7wonders$sites)
+
+
+nn7wonders %>%leaflet() %>% addTiles()%>% addCircleMarkers(popup = nn7wonders$sites,weight = 10, radius = 2,color = nn7wonders$col)%>% addLegend(labels = c("Before AD","1AD-1000AD","From 1000AD"),colors = c("blue","red","green") )
+```
+
+New Seven Wonders plus one are as below:
+```{r, comment="",message=FALSE, }
+n7wonders$name
+```
